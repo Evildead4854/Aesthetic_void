@@ -6,9 +6,6 @@
     <title>The Aesthetic Void</title>
     
     <meta name="description" content="Scream your secrets into the digital void. An anonymous, ephemeral experience.">
-    <meta property="og:title" content="The Aesthetic Void">
-    <meta property="og:type" content="website">
-
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
@@ -73,7 +70,7 @@
     </div>
 
     <div class="counter-container fade-in">
-        <span id="globalCount">...</span> secrets swallowed
+        <span id="globalCount">0</span> secrets swallowed
     </div>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
@@ -101,8 +98,9 @@
 
         // Real-time listener
         counterRef.on('value', (snapshot) => {
-            const count = snapshot.val() || 0;
-            document.getElementById('globalCount').innerText = count.toLocaleString();
+            const count = snapshot.val();
+            // If data exists, show it. Otherwise, show 0.
+            document.getElementById('globalCount').innerText = (count !== null) ? count.toLocaleString() : "0";
         });
 
         document.getElementById('shatterBtn').addEventListener('click', function() {
@@ -111,10 +109,9 @@
             
             if(textValue.trim() === "") return; 
             
-            // Hide the UI
             document.getElementById('voidContainer').style.opacity = 0;
             
-            // CORRECTED: Firebase Increment Logic
+            // Increment logic
             counterRef.transaction((currentCount) => {
                 return (currentCount || 0) + 1;
             });
@@ -134,7 +131,6 @@
                      span.innerText = char;
                      span.classList.add('shard');
                      
-                     // Starting point
                      const offsetX = (Math.random() - 0.5) * 100;
                      const offsetY = (Math.random() - 0.5) * 50;
                      span.style.left = `${startX + offsetX}px`;
@@ -157,7 +153,6 @@
                 });
             });
 
-            // Bring the UI back after the animation starts
             setTimeout(() => {
                 document.getElementById('userInput').value = "";
                 document.getElementById('voidContainer').style.opacity = 1;
