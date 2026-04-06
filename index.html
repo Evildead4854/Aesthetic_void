@@ -3,123 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <title>The Aesthetic Void</title>
-    <meta name="description" content="Scream your secrets into the digital void. A free, anonymous, ephemeral aesthetic experience where your text shatters and disappears forever.">
-    <meta name="keywords" content="aesthetic void, vent online, anonymous secrets, digital void, ephemeral text, scream into the void">
+    
+    <meta name="description" content="Scream your secrets into the digital void. An anonymous, ephemeral experience.">
     <meta property="og:title" content="The Aesthetic Void">
-    <meta property="og:description" content="Scream your secrets into the digital void.">
     <meta property="og:type" content="website">
 
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
         body, html {
-            margin: 0; 
-            padding: 0; 
-            height: 100%;
-            background-color: #050505; 
-            color: #eaeaea;
+            margin: 0; padding: 0; height: 100%;
+            background-color: #050505; color: #eaeaea;
             font-family: 'Space Grotesk', sans-serif;
-            display: flex; 
-            flex-direction: column;
-            justify-content: center; 
-            align-items: center;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
             overflow: hidden;
         }
 
         .void-container {
-            display: flex; 
-            flex-direction: column; 
-            align-items: center;
-            width: 80%; 
-            max-width: 600px; 
-            z-index: 10;
+            display: flex; flex-direction: column; align-items: center;
+            width: 80%; max-width: 600px; z-index: 10;
+            transition: opacity 0.5s ease;
         }
 
-        h1 { 
-            font-weight: 300; 
-            letter-spacing: 2px; 
-            margin-bottom: 40px; 
-            opacity: 0.7; 
-            text-align: center;
-        }
+        h1 { font-weight: 300; letter-spacing: 2px; margin-bottom: 40px; opacity: 0.7; text-align: center; }
 
         textarea {
-            width: 100%; 
-            height: 150px; 
-            background: transparent;
-            border: none; 
-            border-bottom: 1px solid #333; 
-            color: #fff;
-            font-family: inherit; 
-            font-size: 1.2rem; 
-            resize: none; 
-            outline: none;
-            padding: 10px; 
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            width: 100%; height: 150px; background: transparent;
+            border: none; border-bottom: 1px solid #333; color: #fff;
+            font-family: inherit; font-size: 1.2rem; resize: none; outline: none;
+            padding: 10px; transition: border-color 0.3s ease;
         }
 
-        textarea:focus { 
-            border-bottom: 1px solid #fff; 
-            box-shadow: 0 10px 10px -10px rgba(255, 255, 255, 0.1); 
-        }
-
-        textarea::placeholder { 
-            color: #444; 
-        }
+        textarea:focus { border-bottom: 1px solid #fff; }
 
         button {
-            margin-top: 40px; 
-            background: transparent; 
-            color: #fff;
-            border: 1px solid #fff; 
-            padding: 12px 40px; 
-            font-size: 1rem;
-            font-family: inherit; 
-            text-transform: uppercase; 
-            letter-spacing: 3px;
-            cursor: pointer; 
-            transition: all 0.4s ease;
+            margin-top: 40px; background: transparent; color: #fff;
+            border: 1px solid #fff; padding: 12px 40px; font-size: 1rem;
+            font-family: inherit; text-transform: uppercase; letter-spacing: 3px;
+            cursor: pointer; transition: all 0.4s ease;
         }
 
-        button:hover { 
-            background: #fff; 
-            color: #050505; 
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); 
-        }
+        button:hover { background: #fff; color: #050505; box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); }
 
-        /* The Global Counter Styling */
         .counter-container {
-            position: absolute;
-            bottom: 30px;
-            font-size: 0.9rem;
-            color: #444;
-            letter-spacing: 1px;
-            text-transform: lowercase;
-            transition: opacity 2s ease;
+            position: absolute; bottom: 30px; font-size: 0.9rem;
+            color: #444; letter-spacing: 1px; text-transform: lowercase;
         }
 
-        #globalCount {
-            color: #888;
-            font-weight: 600;
-        }
+        #globalCount { color: #888; font-weight: 600; }
 
-        .fade-in { 
-            animation: fadeIn 2s ease-in forwards; 
-            opacity: 0; 
-        }
-
-        @keyframes fadeIn { 
-            to { opacity: 1; } 
-        }
+        .fade-in { animation: fadeIn 2s ease-in forwards; opacity: 0; }
+        @keyframes fadeIn { to { opacity: 1; } }
 
         .shard {
-            position: absolute; 
-            color: #fff; 
-            font-size: 1.2rem;
-            pointer-events: none; 
-            text-shadow: 0 0 8px rgba(255,255,255,0.8);
+            position: absolute; color: #fff; font-size: 1.2rem;
+            pointer-events: none; text-shadow: 0 0 8px rgba(255,255,255,0.8);
+            z-index: 5;
         }
     </style>
 </head>
@@ -136,12 +77,10 @@
     </div>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     
     <script>
-        // REPLACE THIS BLOCK WITH YOUR ACTUAL FIREBASE CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyAlaahdKtqEfpRo4dH5mNS3EztQmPG4uEU",
             authDomain: "aesthetic-void.firebaseapp.com",
@@ -160,7 +99,7 @@
         const database = firebase.database();
         const counterRef = database.ref('voidCounter');
 
-        // Listen for real-time updates to the counter
+        // Real-time listener
         counterRef.on('value', (snapshot) => {
             const count = snapshot.val() || 0;
             document.getElementById('globalCount').innerText = count.toLocaleString();
@@ -172,11 +111,13 @@
             
             if(textValue.trim() === "") return; 
             
-            const container = document.getElementById('voidContainer');
-            container.style.opacity = 0;
+            // Hide the UI
+            document.getElementById('voidContainer').style.opacity = 0;
             
-            // Increment the Firebase counter
-            counterRef.set(firebase.database.ServerValue.increment(1));
+            // CORRECTED: Firebase Increment Logic
+            counterRef.transaction((currentCount) => {
+                return (currentCount || 0) + 1;
+            });
 
             createShards(textValue);
         });
@@ -193,9 +134,9 @@
                      span.innerText = char;
                      span.classList.add('shard');
                      
-                     const offsetX = (Math.random() - 0.5) * 200;
-                     const offsetY = (Math.random() - 0.5) * 100;
-                     
+                     // Starting point
+                     const offsetX = (Math.random() - 0.5) * 100;
+                     const offsetY = (Math.random() - 0.5) * 50;
                      span.style.left = `${startX + offsetX}px`;
                      span.style.top = `${startY + offsetY}px`;
                      
@@ -203,23 +144,24 @@
 
                      anime({
                          targets: span,
-                         translateX: () => anime.random(-800, 800),
-                         translateY: () => anime.random(-800, 800),
+                         translateX: () => anime.random(-700, 700),
+                         translateY: () => anime.random(-700, 700),
                          rotate: () => anime.random(-360, 360),
                          opacity: 0,
-                         duration: anime.random(1500, 3000),
+                         duration: anime.random(2000, 4000),
                          easing: 'easeOutExpo',
-                         complete: function(anim) {
-                             span.remove(); 
-                             
-                             setTimeout(() => {
-                                 document.getElementById('userInput').value = "";
-                                 document.getElementById('voidContainer').style.opacity = 1;
-                             }, 1000);
+                         complete: function() {
+                             span.remove();
                          }
                      });
                 });
             });
+
+            // Bring the UI back after the animation starts
+            setTimeout(() => {
+                document.getElementById('userInput').value = "";
+                document.getElementById('voidContainer').style.opacity = 1;
+            }, 3500);
         }
     </script>
 </body>
