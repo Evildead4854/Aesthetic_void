@@ -2,407 +2,138 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Aesthetic Void | Official Site | Scream into the Digital Void</title>
-    
-    <meta name="description" content="The #1 Aesthetic Void. A safe, anonymous place to release secrets and watch your words shatter into the abyss.">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spend the $809 Billion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; }
-        body, html {
-            margin: 0; padding: 0; height: 100%;
-            background-color: #050505; color: #eaeaea;
-            font-family: 'Space Grotesk', sans-serif;
-            display: flex; justify-content: center; align-items: center;
-            overflow: hidden;
+        :root { --accent: #00ff88; --bg: #0a0a0a; }
+        body { background: var(--bg); color: white; font-family: 'Inter', sans-serif; margin: 0; padding-bottom: 50px; }
+        
+        #header {
+            position: sticky; top: 0; background: #111; padding: 30px;
+            text-align: center; border-bottom: 2px solid var(--accent); z-index: 100;
         }
-        .void-container {
-            display: flex; flex-direction: column; align-items: center;
-            width: 90%; max-width: 500px; z-index: 10;
-            text-align: center;
-            transition: opacity 0.6s ease;
+        #money-display { font-size: clamp(2rem, 8vw, 4rem); font-weight: 900; color: var(--accent); text-shadow: 0 0 20px rgba(0,255,136,0.3); }
+        
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        
+        .item-card {
+            background: #181818; padding: 25px; border-radius: 20px;
+            border: 1px solid #333; text-align: center; transition: 0.3s;
         }
-        h1 { 
-            font-weight: 300; 
-            letter-spacing: 3px; 
-            margin-bottom: 50px; 
-            opacity: 0.8; 
-            white-space: nowrap; 
-            font-size: 1.8rem;
-            background: linear-gradient(135deg, #ffffff 0%, #aaaaaa 100%);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-        }
-        textarea {
-            width: 100%; height: 120px; background: transparent;
-            border: none; border-bottom: 1px solid #222; color: #fff;
-            font-family: inherit; font-size: 1.1rem; resize: none; outline: none;
-            padding: 15px; transition: border-color 0.4s ease; text-align: center;
-        }
-        textarea:focus { border-bottom: 1px solid #888; }
-        textarea::placeholder {
-            color: #3a3a3a;
-            font-weight: 300;
-        }
+        .item-card:hover { border-color: var(--accent); transform: scale(1.02); }
+        .item-name { font-size: 1.5rem; font-weight: 700; margin-bottom: 5px; }
+        .price { color: #aaa; margin-bottom: 20px; font-family: monospace; font-size: 1.1rem; }
+        
+        .controls { display: flex; justify-content: space-around; align-items: center; }
         button {
-            margin-top: 50px; background: transparent; color: #fff;
-            border: 1px solid #fff; padding: 14px 45px; font-size: 0.9rem;
-            font-family: inherit; text-transform: uppercase; letter-spacing: 4px;
-            cursor: pointer; transition: all 0.4s ease; margin-bottom: 40px;
+            padding: 12px 25px; border: none; border-radius: 10px;
+            cursor: pointer; font-weight: bold; font-family: inherit; transition: 0.2s;
         }
-        button:hover { background: #fff; color: #050505; box-shadow: 0 0 25px rgba(255, 255, 255, 0.2); }
-        button:active { transform: scale(0.97); }
-        .counter-container { font-size: 1rem; color: #ff4d4d; letter-spacing: 1.5px; text-transform: lowercase; }
-        #globalCount { font-weight: 600; color: #ff4d4d; margin-right: 5px; }
-        .shard { 
-            position: absolute; 
-            color: #fff; 
-            font-size: 1.2rem; 
-            pointer-events: none; 
-            z-index: 5;
-            text-shadow: 0 0 5px rgba(255,255,255,0.5);
-            will-change: transform;
+        .buy { background: var(--accent); color: #000; }
+        .sell { background: #333; color: #ff4d4d; }
+        .count { font-size: 1.8rem; font-weight: 700; min-width: 50px; }
+
+        #receipt {
+            margin-top: 40px; background: #111; padding: 30px; border-radius: 20px;
+            border: 1px dashed #444;
         }
-        
-        /* subtle screen flash */
-        .flash {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: white;
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0;
-        }
-        
-        /* vibration animation for container */
-        @keyframes voidShake {
-            0% { transform: translate(0px, 0px) rotate(0deg); }
-            10% { transform: translate(-4px, 2px) rotate(-0.5deg); }
-            20% { transform: translate(5px, -2px) rotate(0.5deg); }
-            30% { transform: translate(-3px, 3px) rotate(-0.3deg); }
-            40% { transform: translate(4px, -1px) rotate(0.3deg); }
-            50% { transform: translate(-2px, 2px) rotate(-0.2deg); }
-            60% { transform: translate(2px, -2px) rotate(0.2deg); }
-            70% { transform: translate(-1px, 1px) rotate(-0.1deg); }
-            80% { transform: translate(1px, -1px) rotate(0.1deg); }
-            90% { transform: translate(0px, 0px) rotate(0deg); }
-            100% { transform: translate(0px, 0px) rotate(0deg); }
-        }
-        
-        .shake-void {
-            animation: voidShake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-        }
+        .receipt-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; }
     </style>
 </head>
 <body>
 
-    <div class="void-container" id="voidContainer">
-        <h1>Scream into the void.</h1>
-        <textarea id="userInput" placeholder="Type your secret..."></textarea>
-        <button id="shatterBtn">Release</button>
-        <div class="counter-container">
-            <span id="globalCount">0</span> secrets swallowed
+    <div id="header">
+        <div id="money-display">$809,000,000,000</div>
+        <p>You have the wealth of a modern emperor. Spend it wisely.</p>
+    </div>
+
+    <div class="container">
+        <div class="grid" id="item-grid"></div>
+
+        <div id="receipt">
+            <h2 style="text-align: center;">The Receipt of Excess</h2>
+            <div id="receipt-content"></div>
         </div>
     </div>
 
-    <audio id="shatterAudio" preload="auto" crossorigin="anonymous">
-        <source src="https://assets.mixkit.co/sfx/preview/mixkit-glass-break-with-high-pitch-1576.mp3" type="audio/mpeg">
-    </audio>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    
     <script>
-        // ============================================
-        // AESTHETIC VOID - WITH VIBRATION & HAPTIC FEEDBACK
-        // ============================================
-        
-        const audio = document.getElementById('shatterAudio');
-        const voidContainer = document.getElementById('voidContainer');
-        const userInput = document.getElementById('userInput');
-        const shatterBtn = document.getElementById('shatterBtn');
-        
-        // ------------------------------
-        // HAPTIC / VIBRATION FUNCTION
-        // ------------------------------
-        function triggerVibration() {
-            // Check if vibration API is supported
-            if ('vibrate' in navigator) {
-                // Create a powerful glass-break like vibration pattern
-                // Pattern: short burst, pause, longer burst, final crackle
-                navigator.vibrate([
-                    50,   // vibrate 50ms
-                    30,   // pause 30ms
-                    80,   // vibrate 80ms
-                    20,   // pause 20ms
-                    100,  // vibrate 100ms
-                    40,   // pause 40ms
-                    60    // final vibrate 60ms
-                ]);
-                console.log("💥 Haptic feedback triggered");
-            } else {
-                console.log("Vibration API not supported on this device");
-                // Fallback: add a CSS shake effect for non-mobile devices
-                voidContainer.classList.add('shake-void');
-                setTimeout(() => {
-                    voidContainer.classList.remove('shake-void');
-                }, 400);
+        let bankBalance = 809000000000;
+        const inventory = {};
+
+        const storeItems = [
+            { name: "Full McDonald's Meal", price: 15 },
+            { name: "Gaming PC Setup", price: 5000 },
+            { name: "In-Ground Pool", price: 50000 },
+            { name: "Bugatti Mistral", price: 5000000 },
+            { name: "NYC Penthouse", price: 150000000 },
+            { name: "Boeing 747", price: 400000000 },
+            { name: "F-35 Fighter Jet", price: 100000000 },
+            { name: "Small Country (GDP)", price: 5000000000 },
+            { name: "Professional NFL Team", price: 6000000000 },
+            { name: "The Pyramids (Giza)", price: 50000000000 },
+            { name: "The Moon (Exclusive Rights)", price: 150000000000 },
+            { name: "Universal Healthcare (US/Year)", concealment: "True", price: 450000000000 }
+        ];
+
+        const grid = document.getElementById('item-grid');
+        const moneyEl = document.getElementById('money-display');
+        const receiptEl = document.getElementById('receipt-content');
+
+        function updateUI() {
+            moneyEl.innerText = "$" + bankBalance.toLocaleString();
+            renderReceipt();
+        }
+
+        function renderReceipt() {
+            receiptEl.innerHTML = "";
+            let itemsFound = false;
+            for (const [name, qty] of Object.entries(inventory)) {
+                if (qty > 0) {
+                    itemsFound = true;
+                    const item = storeItems.find(i => i.name === name);
+                    const div = document.createElement('div');
+                    div.className = 'receipt-row';
+                    div.innerHTML = `<span>${name} x${qty}</span> <span>$${(item.price * qty).toLocaleString()}</span>`;
+                    receiptEl.appendChild(div);
+                }
             }
+            if (!itemsFound) receiptEl.innerHTML = "<p style='text-align:center; opacity:0.5;'>No purchases yet.</p>";
         }
-        
-        // Add visual shake effect in addition to vibration for all devices
-        function addVisualShake() {
-            voidContainer.classList.add('shake-void');
-            setTimeout(() => {
-                voidContainer.classList.remove('shake-void');
-            }, 400);
-        }
-        
-        // Screen flash effect
-        function addScreenFlash() {
-            const flash = document.createElement('div');
-            flash.className = 'flash';
-            document.body.appendChild(flash);
-            anime({
-                targets: flash,
-                opacity: [0.35, 0],
-                duration: 250,
-                easing: 'easeOutQuad',
-                complete: () => flash.remove()
-            });
-        }
-        
-        // ------------------------------
-        // AUDIO WITH ROBUST UNLOCK
-        // ------------------------------
-        let audioReady = false;
-        
-        function unlockAudioOnInteraction() {
-            if (audioReady) return;
-            audio.load();
-            audio.volume = 0.7;
-            audio.play().then(() => {
-                audio.pause();
-                audio.currentTime = 0;
-                audioReady = true;
-                console.log("🎧 Audio unlocked");
-            }).catch(e => {
-                console.log("Audio unlock pending");
-            });
-        }
-        
-        // Unlock on any user interaction
-        document.body.addEventListener('click', unlockAudioOnInteraction, { once: true });
-        document.body.addEventListener('touchstart', unlockAudioOnInteraction, { once: true });
-        userInput.addEventListener('focus', unlockAudioOnInteraction);
-        userInput.addEventListener('click', unlockAudioOnInteraction);
-        shatterBtn.addEventListener('click', unlockAudioOnInteraction);
-        
-        function playShatterSound() {
-            if (!audioReady) {
-                // Try to play anyway - might work after user interaction
-                audio.currentTime = 0;
-                audio.play().then(() => {
-                    audioReady = true;
-                }).catch(e => {
-                    console.log("Audio still locked, but haptics will work");
-                });
-                return;
+
+        storeItems.forEach((item, index) => {
+            const card = document.createElement('div');
+            card.className = 'item-card';
+            card.innerHTML = `
+                <div class="item-name">${item.name}</div>
+                <div class="price">$${item.price.toLocaleString()}</div>
+                <div class="controls">
+                    <button class="sell" onclick="handleTrade('${item.name}', -1)">Sell</button>
+                    <span id="q-${index}" class="count">0</span>
+                    <button class="buy" onclick="handleTrade('${item.name}', 1)">Buy</button>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+
+        window.handleTrade = (name, direction) => {
+            const item = storeItems.find(i => i.name === name);
+            const index = storeItems.indexOf(item);
+            
+            if (direction === 1 && bankBalance >= item.price) {
+                bankBalance -= item.price;
+                inventory[name] = (inventory[name] || 0) + 1;
+            } else if (direction === -1 && inventory[name] > 0) {
+                bankBalance += item.price;
+                inventory[name]--;
             }
-            audio.currentTime = 0;
-            audio.play().catch(e => {
-                console.log("Audio play error:", e);
-                audioReady = false;
-            });
-        }
-        
-        // ------------------------------
-        // FIREBASE SETUP
-        // ------------------------------
-        const firebaseConfig = {
-            apiKey: "AIzaSyAlaahdKtqEfpRo4dH5mNS3EztQmPG4uEU",
-            authDomain: "aesthetic-void.firebaseapp.com",
-            databaseURL: "https://aesthetic-void-default-rtdb.firebaseio.com/",
-            projectId: "aesthetic-void",
-            storageBucket: "aesthetic-void.firebasestorage.app",
-            messagingSenderId: "391354334307",
-            appId: "1:391354334307:web:fdcd74425eb0e0ee954c56"
+
+            document.getElementById(`q-${index}`).innerText = inventory[name] || 0;
+            updateUI();
         };
 
-        if (!firebase.apps.length) { 
-            firebase.initializeApp(firebaseConfig); 
-        }
-        const database = firebase.database();
-        const counterRef = database.ref('voidCounter');
-
-        counterRef.on('value', (snapshot) => {
-            const count = snapshot.val() || 0;
-            document.getElementById('globalCount').innerText = count.toLocaleString();
-        });
-        
-        // ------------------------------
-        // SHATTER EFFECTS (letters flying)
-        // ------------------------------
-        function createShards(text) {
-            const startX = window.innerWidth / 2;
-            const startY = window.innerHeight / 2;
-            
-            // Create flying letter shards
-            const chars = text.split('');
-            chars.forEach((char, index) => {
-                if(char === " " || char === "\n" || char === "\t") return;
-                const span = document.createElement('span');
-                span.innerText = char;
-                span.classList.add('shard');
-                // Slight initial random offset for organic feel
-                span.style.left = (startX + (Math.random() - 0.5) * 20) + "px";
-                span.style.top = (startY + (Math.random() - 0.5) * 20) + "px";
-                span.style.fontSize = (16 + Math.random() * 12) + "px";
-                span.style.fontWeight = Math.random() > 0.7 ? 'bold' : 'normal';
-                document.body.appendChild(span);
-                
-                anime({
-                    targets: span,
-                    translateX: () => anime.random(-750, 750),
-                    translateY: () => anime.random(-750, 750),
-                    rotate: () => anime.random(-400, 400),
-                    opacity: [1, 0],
-                    scale: [1, () => 0.3 + Math.random() * 0.5],
-                    duration: anime.random(1800, 4000),
-                    easing: 'easeOutExpo',
-                    complete: () => span.remove()
-                });
-            });
-            
-            // Add extra glass particles (tiny fragments)
-            const particleCount = Math.min(35, Math.floor(text.length * 0.8));
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.style.position = 'absolute';
-                particle.style.width = Math.random() * 6 + 2 + 'px';
-                particle.style.height = particle.style.width;
-                particle.style.backgroundColor = `hsl(${Math.random() * 30 + 20}, 80%, 65%)`;
-                particle.style.borderRadius = '50%';
-                particle.style.pointerEvents = 'none';
-                particle.style.left = startX + (Math.random() - 0.5) * 30 + 'px';
-                particle.style.top = startY + (Math.random() - 0.5) * 30 + 'px';
-                document.body.appendChild(particle);
-                
-                anime({
-                    targets: particle,
-                    translateX: () => anime.random(-500, 500),
-                    translateY: () => anime.random(-500, 500),
-                    opacity: [0.8, 0],
-                    scale: [1, 0],
-                    duration: anime.random(1200, 2500),
-                    easing: 'easeOutQuad',
-                    complete: () => particle.remove()
-                });
-            }
-        }
-        
-        // ------------------------------
-        // MAIN RELEASE FUNCTION
-        // ------------------------------
-        let isReleasing = false;
-        
-        function releaseToVoid() {
-            if (isReleasing) return;
-            
-            const inputValue = userInput.value;
-            if (inputValue.trim() === "") {
-                // Gentle error feedback - small shake
-                userInput.style.borderBottomColor = "#ff4d4d";
-                setTimeout(() => {
-                    userInput.style.borderBottomColor = "#222";
-                }, 500);
-                
-                // Also give a tiny haptic feedback for empty attempt
-                if ('vibrate' in navigator) {
-                    navigator.vibrate(50);
-                }
-                return;
-            }
-            
-            isReleasing = true;
-            
-            // ========== VIBRATION & HAPTIC FEEDBACK ==========
-            triggerVibration();      // Physical vibration (mobile)
-            addVisualShake();        // Visual shake effect (all devices)
-            addScreenFlash();        // Subtle flash for impact
-            
-            // ========== AUDIO (if available) ==========
-            playShatterSound();
-            
-            // ========== UPDATE FIREBASE COUNTER ==========
-            counterRef.transaction((curr) => (curr || 0) + 1);
-            
-            // ========== CREATE SHATTER ANIMATION ==========
-            createShards(inputValue);
-            
-            // ========== FADE OUT CONTAINER ==========
-            voidContainer.style.opacity = "0";
-            voidContainer.style.transform = "scale(0.98)";
-            
-            // ========== RESET AFTER ANIMATION ==========
-            setTimeout(() => {
-                userInput.value = "";
-                voidContainer.style.opacity = "1";
-                voidContainer.style.transform = "scale(1)";
-                isReleasing = false;
-                // Refocus for next scream
-                setTimeout(() => {
-                    userInput.focus();
-                }, 100);
-            }, 3500);
-        }
-        
-        // Event listeners
-        shatterBtn.addEventListener('click', releaseToVoid);
-        
-        // Ctrl+Enter / Cmd+Enter shortcut
-        userInput.addEventListener('keydown', (e) => {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-                e.preventDefault();
-                releaseToVoid();
-            }
-        });
-        
-        // Also trigger on Enter key with Shift? Not needed, but nice
-        userInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                releaseToVoid();
-            }
-        });
-        
-        // Initial counter sync
-        counterRef.once('value', (snap) => {
-            if (snap.val() === null) counterRef.set(0);
-        });
-        
-        // Aesthetic cursor effect - subtle
-        console.log("🌑 The void welcomes you. Vibration feedback enabled.");
-        
-        // Show a tiny hint for mobile users about vibration
-        if ('vibrate' in navigator) {
-            console.log("✅ Vibration API supported - haptic feedback ready");
-        } else {
-            // Add a small indicator in console but no big deal
-            const style = document.createElement('style');
-            style.textContent = `
-                .shake-void {
-                    animation: voidShake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-                }
-            `;
-            document.head.appendChild(style);
-        }
+        updateUI();
     </script>
 </body>
 </html>
