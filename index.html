@@ -1,0 +1,108 @@
+%%html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Aesthetic Void</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* CSS GOES HERE */
+        body, html {
+            margin: 0; padding: 0; height: 100%;
+            background-color: #050505; color: #eaeaea;
+            font-family: 'Space Grotesk', sans-serif;
+            display: flex; justify-content: center; align-items: center;
+            overflow: hidden;
+        }
+        .void-container {
+            display: flex; flex-direction: column; align-items: center;
+            width: 80%; max-width: 600px; z-index: 10;
+        }
+        h1 { font-weight: 300; letter-spacing: 2px; margin-bottom: 40px; opacity: 0.7; }
+        textarea {
+            width: 100%; height: 150px; background: transparent;
+            border: none; border-bottom: 1px solid #333; color: #fff;
+            font-family: inherit; font-size: 1.2rem; resize: none; outline: none;
+            padding: 10px; transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        textarea:focus { border-bottom: 1px solid #fff; box-shadow: 0 10px 10px -10px rgba(255, 255, 255, 0.1); }
+        textarea::placeholder { color: #444; }
+        button {
+            margin-top: 40px; background: transparent; color: #fff;
+            border: 1px solid #fff; padding: 12px 40px; font-size: 1rem;
+            font-family: inherit; text-transform: uppercase; letter-spacing: 3px;
+            cursor: pointer; transition: all 0.4s ease;
+        }
+        button:hover { background: #fff; color: #050505; box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); }
+        .fade-in { animation: fadeIn 2s ease-in forwards; opacity: 0; }
+        @keyframes fadeIn { to { opacity: 1; } }
+        .shard {
+            position: absolute; color: #fff; font-size: 1.2rem;
+            pointer-events: none; text-shadow: 0 0 8px rgba(255,255,255,0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="void-container" id="voidContainer">
+        <h1 class="fade-in">Scream into the void.</h1>
+        <textarea id="userInput" placeholder="Type your secret, your frustration, your unsent text..." class="fade-in"></textarea>
+        <button id="shatterBtn" class="fade-in">Release</button>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    
+    <script>
+        /* JAVASCRIPT GOES HERE */
+        document.getElementById('shatterBtn').addEventListener('click', function() {
+            const textInput = document.getElementById('userInput');
+            const textValue = textInput.value;
+            if(textValue.trim() === "") return; 
+            
+            const container = document.getElementById('voidContainer');
+            container.style.opacity = 0;
+            createShards(textValue);
+        });
+
+        function createShards(text) {
+            const words = text.split(" ");
+            // Use window bounds of the iframe output
+            const startX = window.innerWidth / 2;
+            const startY = window.innerHeight / 2;
+
+            words.forEach((word) => {
+                const chars = word.split("");
+                chars.forEach((char) => {
+                     const span = document.createElement('span');
+                     span.innerText = char;
+                     span.classList.add('shard');
+                     
+                     const offsetX = (Math.random() - 0.5) * 200;
+                     const offsetY = (Math.random() - 0.5) * 100;
+                     
+                     span.style.left = `${startX + offsetX}px`;
+                     span.style.top = `${startY + offsetY}px`;
+                     
+                     document.body.appendChild(span);
+
+                     anime({
+                         targets: span,
+                         translateX: () => anime.random(-800, 800),
+                         translateY: () => anime.random(-800, 800),
+                         rotate: () => anime.random(-360, 360),
+                         opacity: 0,
+                         duration: anime.random(1500, 3000),
+                         easing: 'easeOutExpo',
+                         complete: function(anim) {
+                             span.remove(); 
+                             setTimeout(() => {
+                                 document.getElementById('userInput').value = "";
+                                 document.getElementById('voidContainer').style.opacity = 1;
+                             }, 1000);
+                         }
+                     });
+                });
+            });
+        }
+    </script>
+</body>
+</html>
