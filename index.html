@@ -54,7 +54,7 @@
         </div>
     </div>
 
-    <audio id="shatterAudio" preload="auto">
+    <audio id="shatterAudio" preload="auto" muted crossorigin="anonymous">
         <source src="https://www.soundjay.com/misc/sounds/glass-shatter-1.mp3" type="audio/mpeg">
     </audio>
     
@@ -64,18 +64,6 @@
     
     <script>
         const audio = document.getElementById('shatterAudio');
-
-        // FORCE UNLOCK AUDIO ON FIRST TOUCH
-        const unlockAudio = () => {
-            audio.play().then(() => {
-                audio.pause();
-                audio.currentTime = 0;
-            }).catch(e => console.log("Audio waiting for interaction"));
-            document.removeEventListener('click', unlockAudio);
-            document.removeEventListener('touchstart', unlockAudio);
-        };
-        document.addEventListener('click', unlockAudio);
-        document.addEventListener('touchstart', unlockAudio);
 
         const firebaseConfig = {
             apiKey: "AIzaSyAlaahdKtqEfpRo4dH5mNS3EztQmPG4uEU",
@@ -101,11 +89,23 @@
             const val = input.value;
             if(val.trim() === "") return; 
 
-            // Play sound with Volume reset
-            audio.volume = 1.0;
+            // --- AUDIO LOGIC ---
+            audio.muted = false; // Unmute right before playing
             audio.currentTime = 0;
-            audio.play().catch(err => console.log("Playback error:", err));
+            
+            // Sync sound with a tiny delay for visual impact
+            setTimeout(() => {
+                const playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        console.log("Shatter success");
+                    }).catch(err => {
+                        console.log("Playback blocked:", err);
+                    });
+                }
+            }, 50);
 
+            // --- FIREBASE & ANIMATION ---
             counterRef.transaction((curr) => (curr || 0) + 1);
             createShards(val);
             
