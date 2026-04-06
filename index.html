@@ -2,245 +2,138 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Aesthetic Void | Echo Chamber of Broken Glass</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aesthetic Void | Official Site | Scream into the Digital Void</title>
     
     <meta name="description" content="The #1 Aesthetic Void. A safe, anonymous place to release secrets and watch your words shatter into the abyss.">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
-        * {
-            box-sizing: border-box;
-            user-select: none; /* slightly more immersive, avoid accidental text select */
-        }
-        
+        * { box-sizing: border-box; }
         body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            background: radial-gradient(circle at 30% 10%, #0a0a0a, #010101);
-            color: #ececec;
+            margin: 0; padding: 0; height: 100%;
+            background-color: #050505; color: #eaeaea;
             font-family: 'Space Grotesk', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: flex; justify-content: center; align-items: center;
             overflow: hidden;
-            cursor: default;
         }
-        
-        /* subtle noise texture overlay */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjciIG51bU9jdGF2ZXM9IjMiLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjZikiIG9wYWNpdHk9IjAuMDYiLz48L3N2Zz4=');
-            background-repeat: repeat;
-            pointer-events: none;
-            z-index: 2;
-            opacity: 0.25;
-        }
-        
         .void-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 90%;
-            max-width: 560px;
-            z-index: 20;
+            display: flex; flex-direction: column; align-items: center;
+            width: 90%; max-width: 500px; z-index: 10;
             text-align: center;
-            transition: opacity 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-            background: rgba(5, 5, 5, 0.4);
-            backdrop-filter: blur(3px);
-            border-radius: 48px;
-            padding: 2rem 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 20px 35px -15px rgba(0,0,0,0.5);
+            transition: opacity 0.6s ease;
         }
-        
-        h1 {
-            font-weight: 300;
-            letter-spacing: 4px;
-            margin-bottom: 40px;
-            opacity: 0.85;
-            font-size: 1.9rem;
-            background: linear-gradient(135deg, #fff 30%, #aaa 80%);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 8px rgba(255,255,200,0.2);
-        }
-        
+        h1 { font-weight: 300; letter-spacing: 3px; margin-bottom: 50px; opacity: 0.8; white-space: nowrap; font-size: 1.8rem; }
         textarea {
-            width: 100%;
-            height: 130px;
-            background: rgba(20, 20, 30, 0.6);
-            border: none;
-            border-bottom: 1px solid #333;
-            color: #f0f0f0;
-            font-family: inherit;
-            font-size: 1.1rem;
-            resize: none;
-            outline: none;
-            padding: 20px 18px;
-            text-align: center;
-            transition: all 0.3s ease;
-            border-radius: 32px;
-            backdrop-filter: blur(4px);
-            letter-spacing: 0.3px;
+            width: 100%; height: 120px; background: transparent;
+            border: none; border-bottom: 1px solid #222; color: #fff;
+            font-family: inherit; font-size: 1.1rem; resize: none; outline: none;
+            padding: 15px; transition: border-color 0.4s ease; text-align: center;
         }
-        
-        textarea:focus {
-            border-bottom: 1px solid #9e7eff;
-            background: rgba(30, 30, 45, 0.7);
-            box-shadow: 0 4px 18px rgba(158, 126, 255, 0.2);
-        }
-        
-        textarea::placeholder {
-            color: #6a6a7a;
-            font-weight: 300;
-            letter-spacing: 1px;
-        }
-        
+        textarea:focus { border-bottom: 1px solid #555; }
         button {
-            margin-top: 48px;
-            background: transparent;
-            color: #fff;
-            border: 1.5px solid rgba(255, 255, 255, 0.7);
-            padding: 14px 48px;
-            font-size: 0.85rem;
-            font-family: inherit;
-            text-transform: uppercase;
-            letter-spacing: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 45px;
-            border-radius: 60px;
-            backdrop-filter: blur(4px);
-            font-weight: 400;
+            margin-top: 50px; background: transparent; color: #fff;
+            border: 1px solid #fff; padding: 14px 45px; font-size: 0.9rem;
+            font-family: inherit; text-transform: uppercase; letter-spacing: 4px;
+            cursor: pointer; transition: all 0.4s ease; margin-bottom: 40px;
         }
-        
-        button:hover {
-            background: #fff;
-            color: #050505;
-            box-shadow: 0 0 28px rgba(255, 255, 255, 0.35);
-            border-color: #fff;
-            transform: scale(1.02);
-        }
-        
-        .counter-container {
-            font-size: 0.85rem;
-            font-weight: 300;
-            color: #ff7675;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            background: rgba(0,0,0,0.3);
-            padding: 8px 18px;
-            border-radius: 40px;
-            display: inline-block;
-            backdrop-filter: blur(2px);
-        }
-        
-        #globalCount {
-            font-weight: 700;
-            color: #ff5e5e;
-            font-size: 1.3rem;
-            margin-right: 6px;
-            text-shadow: 0 0 6px #ff3a3a;
-        }
-        
-        /* shattered shard pieces */
-        .shard {
-            position: absolute;
-            color: #fff;
-            font-size: 1.4rem;
-            font-weight: 500;
-            pointer-events: none;
-            z-index: 100;
-            filter: drop-shadow(0 0 6px rgba(255,80,80,0.6));
-            will-change: transform, opacity;
-            white-space: pre;
-            font-family: 'Space Grotesk', monospace;
-        }
-        
-        /* tiny particles / glass dust */
-        .glass-dust {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: #ffbb99;
-            border-radius: 50%;
-            opacity: 0.8;
-            pointer-events: none;
-            z-index: 90;
-        }
-        
-        /* unlock button style (hidden initially) for audio unlock */
-        .audio-unlock-toast {
-            position: fixed;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #111;
-            color: #ffb347;
-            padding: 12px 24px;
-            border-radius: 60px;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-            z-index: 200;
-            backdrop-filter: blur(16px);
-            border: 1px solid #ffb34755;
-            font-weight: 400;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: monospace;
-            white-space: nowrap;
-            box-shadow: 0 0 18px rgba(0,0,0,0.6);
-        }
-        
-        .audio-unlock-toast:hover {
-            background: #ffb34720;
-            color: #ffdd99;
-            border-color: #ffb347;
-        }
-        
-        @media (max-width: 550px) {
-            .void-container { padding: 1.5rem 1rem; width: 92%; }
-            h1 { font-size: 1.4rem; letter-spacing: 2px; white-space: normal; }
-            button { letter-spacing: 3px; padding: 12px 32px; margin-top: 36px; }
-            textarea { font-size: 1rem; }
-        }
+        button:hover { background: #fff; color: #050505; box-shadow: 0 0 25px rgba(255, 255, 255, 0.2); }
+        .counter-container { font-size: 1rem; color: #ff4d4d; letter-spacing: 1.5px; text-transform: lowercase; }
+        #globalCount { font-weight: 600; color: #ff4d4d; margin-right: 5px; }
+        .shard { position: absolute; color: #fff; font-size: 1.2rem; pointer-events: none; z-index: 5; }
     </style>
 </head>
 <body>
 
-<div class="void-container" id="voidContainer">
-    <h1>⟡ scream into the void ⟡</h1>
-    <textarea id="userInput" placeholder="type your confession... let it dissolve..."></textarea>
-    <button id="shatterBtn">➤ RELEASE ➤</button>
-    <div class="counter-container">
-        <span id="globalCount">0</span> echoes shattered
+    <div class="void-container" id="voidContainer">
+        <h1>Scream into the void.</h1>
+        <textarea id="userInput" placeholder="Type your secret..."></textarea>
+        <button id="shatterBtn">Release</button>
+        <div class="counter-container">
+            <span id="globalCount">0</span> secrets swallowed
+        </div>
     </div>
-</div>
 
-<!-- audio element: using two sources for robustness and cross-browser glass break -->
-<audio id="shatterAudio" preload="auto" crossorigin="anonymous">
-    <source src="https://assets.mixkit.co/sfx/preview/mixkit-glass-break-with-high-pitch-1576.mp3" type="audio/mpeg">
-    <!-- fallback: another glass break with different tone but same vibe -->
-    <source src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8c8f7b3c6.mp3?filename=glass-smash-6010.mp3" type="audio/mpeg">
-</audio>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
-<script>
-    (function() {
-        // ------------------------------
-        // FIREBASE INIT
-        // ------------------------------
+    <audio id="shatterAudio" preload="auto" crossorigin="anonymous">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-glass-break-with-high-pitch-1576.mp3" type="audio/mpeg">
+    </audio>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
+    <script>
+        // FIXED AUDIO - Using user interaction to unlock and play
+        const audio = document.getElementById('shatterAudio');
+        let audioReady = false;
+        
+        // Pre-load audio and prepare it
+        audio.load();
+        audio.volume = 0.8;
+        
+        // Function to unlock audio (called on any user interaction)
+        function unlockAudio() {
+            if (audioReady) return;
+            
+            // Create a silent play attempt to unlock audio context
+            audio.play().then(() => {
+                audio.pause();
+                audio.currentTime = 0;
+                audioReady = true;
+                console.log("Audio unlocked successfully");
+            }).catch(e => {
+                console.log("Audio unlock pending, will retry");
+            });
+        }
+        
+        // Unlock audio on first user interaction (click or touch anywhere)
+        document.body.addEventListener('click', unlockAudio, { once: true });
+        document.body.addEventListener('touchstart', unlockAudio, { once: true });
+        
+        // Also unlock when user focuses on textarea or clicks button
+        const userInput = document.getElementById('userInput');
+        const shatterBtn = document.getElementById('shatterBtn');
+        
+        userInput.addEventListener('focus', unlockAudio);
+        userInput.addEventListener('click', unlockAudio);
+        shatterBtn.addEventListener('click', unlockAudio);
+        
+        // Function to play shatter sound reliably
+        function playShatterSound() {
+            if (!audioReady) {
+                // Try to unlock and play immediately
+                audio.play().then(() => {
+                    audio.pause();
+                    audio.currentTime = 0;
+                    audioReady = true;
+                    // Now play for real
+                    audio.currentTime = 0;
+                    audio.play().catch(e => console.log("Play failed:", e));
+                }).catch(e => {
+                    console.log("Still locked, attempting fallback");
+                    // Fallback: try anyway
+                    audio.currentTime = 0;
+                    audio.play().catch(e => console.log("Audio blocked"));
+                });
+                return;
+            }
+            
+            // Audio is ready, play it
+            audio.currentTime = 0;
+            audio.play().catch(e => {
+                console.log("Play error, resetting:", e);
+                audioReady = false;
+                // Retry unlock
+                audio.play().then(() => {
+                    audio.pause();
+                    audio.currentTime = 0;
+                    audioReady = true;
+                    audio.play().catch(e => {});
+                }).catch(e => {});
+            });
+        }
+        
+        // Firebase config
         const firebaseConfig = {
             apiKey: "AIzaSyAlaahdKtqEfpRo4dH5mNS3EztQmPG4uEU",
             authDomain: "aesthetic-void.firebaseapp.com",
@@ -250,319 +143,61 @@
             messagingSenderId: "391354334307",
             appId: "1:391354334307:web:fdcd74425eb0e0ee954c56"
         };
-        
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
+
+        if (!firebase.apps.length) { 
+            firebase.initializeApp(firebaseConfig); 
         }
         const database = firebase.database();
         const counterRef = database.ref('voidCounter');
-        
-        // DOM elements
-        const shatterBtn = document.getElementById('shatterBtn');
-        const userInput = document.getElementById('userInput');
-        const globalCountSpan = document.getElementById('globalCount');
-        const voidContainer = document.getElementById('voidContainer');
-        const audioElem = document.getElementById('shatterAudio');
-        
-        // audio unlock state
-        let audioUnlocked = false;
-        let unlockToast = null;
-        
-        // ---------- FIREBASE REAL-TIME COUNTER ----------
+
         counterRef.on('value', (snapshot) => {
             const count = snapshot.val() || 0;
-            globalCountSpan.innerText = count.toLocaleString();
+            document.getElementById('globalCount').innerText = count.toLocaleString();
         });
-        
-        // ---------- HELPER: PLAY GLASS BREAK WITH FALLBACK & ROBUST TRIGGER ----------
-        function playGlassBreak() {
-            if (!audioElem) return;
+
+        // Release function
+        document.getElementById('shatterBtn').addEventListener('click', function() {
+            const input = document.getElementById('userInput');
+            const val = input.value;
+            if(val.trim() === "") return; 
+
+            // Play audio with our robust function
+            playShatterSound();
+
+            // Update Database & Animation
+            counterRef.transaction((curr) => (curr || 0) + 1);
+            createShards(val);
             
-            // reset and play
-            audioElem.currentTime = 0;
-            // We force play and if fails we catch (but we will also add unlock UI)
-            const playPromise = audioElem.play();
-            
-            if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    console.log("✅ glass shatter audio played");
-                    // mark as unlocked if succeeded (browser allowed autoplay now)
-                    audioUnlocked = true;
-                    if (unlockToast && unlockToast.remove) unlockToast.remove();
-                }).catch(error => {
-                    console.warn("⚠️ audio play failed:", error);
-                    // show unlock helper if not already visible
-                    if (!audioUnlocked) {
-                        showUnlockOverlay();
-                    }
-                });
-            }
-        }
-        
-        // ---------- AUDIO UNLOCK UI (because browsers block autoplay) ----------
-        function showUnlockOverlay() {
-            if (unlockToast && document.body.contains(unlockToast)) return;
-            unlockToast = document.createElement('div');
-            unlockToast.className = 'audio-unlock-toast';
-            unlockToast.innerHTML = '🔊 click anywhere to unlock the void sound 🔊';
-            document.body.appendChild(unlockToast);
-            
-            const unlockHandler = () => {
-                // Try to play silent audio or just play our actual audio to unlock
-                audioElem.load();
-                audioElem.volume = 0.1;
-                audioElem.play().then(() => {
-                    audioElem.pause();
-                    audioElem.currentTime = 0;
-                    audioUnlocked = true;
-                    if (unlockToast) unlockToast.style.opacity = '0';
-                    setTimeout(() => {
-                        if (unlockToast && unlockToast.remove) unlockToast.remove();
-                    }, 500);
-                    console.log("✅ audio context unlocked via user interaction");
-                }).catch(e => console.warn("still muted? but we tried", e));
-                
-                document.removeEventListener('click', unlockHandler);
-                document.removeEventListener('touchstart', unlockHandler);
-            };
-            
-            document.addEventListener('click', unlockHandler);
-            document.addEventListener('touchstart', unlockHandler);
-        }
-        
-        // If we detect first interaction with button, also try to pre-unlock audio (just in case)
-        function preUnlockAudioFromUserGesture() {
-            if (audioUnlocked) return;
-            // Attempt to play & immediately pause - unlocks Web Audio policy on user gesture.
-            audioElem.load();
-            audioElem.play().then(() => {
-                audioElem.pause();
-                audioElem.currentTime = 0;
-                audioUnlocked = true;
-                if (unlockToast && unlockToast.remove) unlockToast.remove();
-                console.log("🔓 audio unlocked via release button");
-            }).catch(() => {});
-        }
-        
-        // ---------- SHATTER EFFECT: text fragments + glass dust + anime ----------
-        function createShardsAndDust(text) {
-            if (!text || text.trim().length === 0) return;
+            document.getElementById('voidContainer').style.opacity = 0;
+            setTimeout(() => {
+                input.value = "";
+                document.getElementById('voidContainer').style.opacity = 1;
+            }, 3500);
+        });
+
+        function createShards(text) {
             const startX = window.innerWidth / 2;
             const startY = window.innerHeight / 2;
-            
-            // 1. character shards: each letter flies away chaotically
-            const chars = text.split('');
-            chars.forEach((char, idx) => {
-                if (char === ' ' || char === '\n' || char === '\t') return;
-                const span = document.createElement('span');
-                span.innerText = char;
-                span.classList.add('shard');
-                // random initial slight offset to make it more organic
-                span.style.left = startX + (Math.random() - 0.5) * 18 + "px";
-                span.style.top = startY + (Math.random() - 0.5) * 18 + "px";
-                span.style.fontSize = `${Math.floor(18 + Math.random() * 18)}px`;
-                span.style.fontWeight = Math.random() > 0.7 ? 'bold' : '400';
-                span.style.opacity = 0.95;
-                document.body.appendChild(span);
-                
-                // random flight parameters
-                const angle = Math.random() * Math.PI * 2;
-                const distance = anime.random(450, 1100);
-                const xMove = Math.cos(angle) * distance;
-                const yMove = Math.sin(angle) * distance;
-                const rotation = anime.random(-540, 540);
-                const duration = anime.random(1800, 3800);
-                
-                anime({
-                    targets: span,
-                    translateX: [0, xMove],
-                    translateY: [0, yMove],
-                    rotate: [0, rotation],
-                    opacity: [1, 0],
-                    duration: duration,
-                    easing: 'cubicBezier(0.25, 0.1, 0.25, 1)',
-                    complete: () => {
-                        if (span && span.remove) span.remove();
-                    }
-                });
-            });
-            
-            // 2. glass dust / sparkling particles (adds more "shatter" feel)
-            const particleCount = Math.min(42, Math.floor(text.length * 1.2));
-            for (let i = 0; i < particleCount; i++) {
-                const dust = document.createElement('div');
-                dust.classList.add('glass-dust');
-                dust.style.left = startX + (Math.random() - 0.5) * 40 + "px";
-                dust.style.top = startY + (Math.random() - 0.5) * 40 + "px";
-                dust.style.width = `${Math.random() * 8 + 2}px`;
-                dust.style.height = dust.style.width;
-                dust.style.background = `hsl(${Math.random() * 30 + 20}, 85%, 65%)`;
-                document.body.appendChild(dust);
-                
-                anime({
-                    targets: dust,
-                    translateX: anime.random(-500, 500),
-                    translateY: anime.random(-500, 500),
-                    opacity: [0.9, 0],
-                    scale: [1, 0.2],
-                    rotate: anime.random(0, 360),
-                    duration: anime.random(1200, 2700),
-                    easing: 'easeOutQuad',
-                    complete: () => dust.remove()
-                });
-            }
-            
-            // 3. extra "shockwave" effect: subtle full-screen flash
-            const flashOverlay = document.createElement('div');
-            flashOverlay.style.position = 'fixed';
-            flashOverlay.style.top = '0';
-            flashOverlay.style.left = '0';
-            flashOverlay.style.width = '100%';
-            flashOverlay.style.height = '100%';
-            flashOverlay.style.backgroundColor = '#fff';
-            flashOverlay.style.opacity = '0';
-            flashOverlay.style.pointerEvents = 'none';
-            flashOverlay.style.zIndex = '9999';
-            document.body.appendChild(flashOverlay);
-            anime({
-                targets: flashOverlay,
-                opacity: [0.28, 0],
-                duration: 380,
-                easing: 'easeOutCubic',
-                complete: () => flashOverlay.remove()
+            text.split("").forEach((char) => {
+                 if(char === " ") return;
+                 const span = document.createElement('span');
+                 span.innerText = char;
+                 span.classList.add('shard');
+                 span.style.left = startX + "px";
+                 span.style.top = startY + "px";
+                 document.body.appendChild(span);
+                 anime({
+                     targets: span,
+                     translateX: () => anime.random(-700, 700),
+                     translateY: () => anime.random(-700, 700),
+                     rotate: () => anime.random(-360, 360),
+                     opacity: 0,
+                     duration: anime.random(2000, 4000),
+                     easing: 'easeOutExpo',
+                     complete: () => span.remove()
+                 });
             });
         }
-        
-        // ---------- MAIN RELEASE LOGIC (with audio + counter + animation + fade) ----------
-        let isAnimating = false;
-        
-        async function performRelease() {
-            if (isAnimating) return;
-            const rawText = userInput.value;
-            if (!rawText.trim()) {
-                // subtle vibration / hint
-                userInput.style.borderBottom = "1px solid #ff4d4d";
-                setTimeout(() => { userInput.style.borderBottom = ""; }, 500);
-                return;
-            }
-            
-            isAnimating = true;
-            
-            // ----- AUDIO: play shatter sound (robust, with unlock attempt on button)
-            // If audio not yet unlocked, we call preUnlock (it tries to play+stop)
-            if (!audioUnlocked) {
-                preUnlockAudioFromUserGesture();
-                // still try to play immediately, but might fail; but we'll still show unlock if needed
-                playGlassBreak();
-            } else {
-                playGlassBreak();
-            }
-            
-            // Update Firebase counter (increment)
-            try {
-                await counterRef.transaction((current) => {
-                    return (current || 0) + 1;
-                });
-            } catch(err) {
-                console.warn("Firebase transaction error, but will try set offline fallback", err);
-                // fallback: increment anyway optimistic? just do set after get
-                counterRef.once('value', snap => {
-                    let val = snap.val() || 0;
-                    counterRef.set(val + 1);
-                });
-            }
-            
-            // trigger shattering animation with text (create flying letters and glass dust)
-            createShardsAndDust(rawText);
-            
-            // Fade out container gently to represent "void consuming"
-            voidContainer.style.opacity = "0";
-            voidContainer.style.transform = "scale(0.98)";
-            
-            // after 3.5 seconds, reset container and clear textarea
-            setTimeout(() => {
-                userInput.value = "";
-                voidContainer.style.opacity = "1";
-                voidContainer.style.transform = "scale(1)";
-                isAnimating = false;
-                // small focus shift
-                userInput.blur();
-                // re-focus after reset to keep flow
-                setTimeout(() => {
-                    userInput.focus();
-                }, 80);
-            }, 2800);
-        }
-        
-        // attach event listener to button
-        shatterBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            performRelease();
-        });
-        
-        // also allow pressing Ctrl+Enter / Cmd+Enter inside textarea for quick release
-        userInput.addEventListener('keydown', (e) => {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-                e.preventDefault();
-                performRelease();
-            }
-        });
-        
-        // For better mobile UX: if user taps on textarea, any upcoming gesture helps audio.
-        // We also attach a one-time interaction listener to preemptively unlock audio on first touch anywhere.
-        function gentleAudioPrep() {
-            if (audioUnlocked) return;
-            audioElem.load();
-            audioElem.volume = 0.01;
-            audioElem.play().then(() => {
-                audioElem.pause();
-                audioElem.currentTime = 0;
-                audioUnlocked = true;
-                if (unlockToast) unlockToast.remove();
-                console.log("audio unlocked via early touch");
-            }).catch(() => {});
-            document.removeEventListener('touchstart', gentleAudioPrep);
-            document.removeEventListener('click', gentleAudioPrep);
-        }
-        document.addEventListener('touchstart', gentleAudioPrep, { once: true });
-        document.addEventListener('click', gentleAudioPrep, { once: true });
-        
-        // Show toast only if after 1 second audio is still locked and first release is attempted?
-        // But we can present unlock as optional: we only show after failed play, but better to show once on load.
-        // But we let the playGlassBreak trigger unlock UI if needed. For better user experience, show the unlock prompt 
-        // after a short delay if no interaction yet? let's create a subtle reminder but not intrusive.
-        setTimeout(() => {
-            if (!audioUnlocked && !unlockToast) {
-                // check if browser likely blocks autoplay: show minimal floating tip
-                const tip = document.createElement('div');
-                tip.className = 'audio-unlock-toast';
-                tip.style.background = "#000000aa";
-                tip.style.fontSize = "0.7rem";
-                tip.style.padding = "6px 16px";
-                tip.style.bottom = "12px";
-                tip.innerHTML = "🎧 tap / click to enable shatter sound 🎧";
-                document.body.appendChild(tip);
-                const dismiss = () => {
-                    if (tip && tip.remove) tip.remove();
-                    document.removeEventListener('click', dismiss);
-                    document.removeEventListener('touchstart', dismiss);
-                };
-                document.addEventListener('click', dismiss);
-                document.addEventListener('touchstart', dismiss);
-                setTimeout(() => {
-                    if (tip && tip.remove) tip.remove();
-                }, 5000);
-            }
-        }, 800);
-        
-        // increment stats: also add a fun initial sync
-        counterRef.once('value', snap => {
-            if (snap.val() === null) counterRef.set(0);
-        });
-        
-        // extra visual: set cursor effect
-        console.log("void is listening ...");
-    })();
-</script>
+    </script>
 </body>
 </html>
