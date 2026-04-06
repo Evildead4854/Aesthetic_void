@@ -3,12 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aesthetic Void | Official Site | Scream into the Digital Void</title>
     
-    <title>Aesthetic Void - Scream into the Digital Void</title>
-    <meta name="description" content="The Aesthetic Void is a place to release your secrets, frustrations, and unsent texts. Watch them shatter and disappear forever.">
-    <meta name="keywords" content="Aesthetic Void, Digital Void, Scream into the void, anonymous vent, ephemeral text">
-    <meta name="author" content="Aesthetic Void">
-
+    <meta name="description" content="The #1 Aesthetic Void. A safe, anonymous place to release secrets and watch your words shatter into the abyss.">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
@@ -67,11 +64,18 @@
     
     <script>
         const audio = document.getElementById('shatterAudio');
-        
-        // Audio Wake-up
-        document.body.addEventListener('click', function() {
-            audio.play().then(() => { audio.pause(); audio.currentTime = 0; }).catch(e => {});
-        }, { once: true });
+
+        // FORCE UNLOCK AUDIO ON FIRST TOUCH
+        const unlockAudio = () => {
+            audio.play().then(() => {
+                audio.pause();
+                audio.currentTime = 0;
+            }).catch(e => console.log("Audio waiting for interaction"));
+            document.removeEventListener('click', unlockAudio);
+            document.removeEventListener('touchstart', unlockAudio);
+        };
+        document.addEventListener('click', unlockAudio);
+        document.addEventListener('touchstart', unlockAudio);
 
         const firebaseConfig = {
             apiKey: "AIzaSyAlaahdKtqEfpRo4dH5mNS3EztQmPG4uEU",
@@ -97,8 +101,10 @@
             const val = input.value;
             if(val.trim() === "") return; 
 
+            // Play sound with Volume reset
+            audio.volume = 1.0;
             audio.currentTime = 0;
-            audio.play();
+            audio.play().catch(err => console.log("Playback error:", err));
 
             counterRef.transaction((curr) => (curr || 0) + 1);
             createShards(val);
