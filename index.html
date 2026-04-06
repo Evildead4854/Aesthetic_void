@@ -54,8 +54,8 @@
         </div>
     </div>
 
-    <audio id="shatterAudio" preload="auto" muted crossorigin="anonymous">
-        <source src="https://www.soundjay.com/misc/sounds/glass-shatter-1.mp3" type="audio/mpeg">
+    <audio id="shatterAudio" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-glass-break-with-high-pitch-1576.mp3" type="audio/mpeg">
     </audio>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
@@ -89,23 +89,15 @@
             const val = input.value;
             if(val.trim() === "") return; 
 
-            // --- AUDIO LOGIC ---
-            audio.muted = false; // Unmute right before playing
+            // 🔊 IMMEDIATE PLAYBACK (No timeout, no muted trick)
             audio.currentTime = 0;
-            
-            // Sync sound with a tiny delay for visual impact
-            setTimeout(() => {
-                const playPromise = audio.play();
-                if (playPromise !== undefined) {
-                    playPromise.then(() => {
-                        console.log("Shatter success");
-                    }).catch(err => {
-                        console.log("Playback blocked:", err);
-                    });
-                }
-            }, 50);
+            audio.play().then(() => {
+                console.log("Audio playing ✅");
+            }).catch(err => {
+                console.log("Audio failed ❌", err);
+            });
 
-            // --- FIREBASE & ANIMATION ---
+            // Update Database & Animation
             counterRef.transaction((curr) => (curr || 0) + 1);
             createShards(val);
             
