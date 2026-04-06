@@ -4,8 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Aesthetic Void</title>
+    
+    <meta name="description" content="Scream your secrets into the digital void. Anonymous and ephemeral.">
+    
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
+    
     <style>
+        * { box-sizing: border-box; }
+        
         body, html {
             margin: 0; padding: 0; height: 100%;
             background-color: #050505; color: #eaeaea;
@@ -13,39 +19,67 @@
             display: flex; justify-content: center; align-items: center;
             overflow: hidden;
         }
+
         .void-container {
             display: flex; flex-direction: column; align-items: center;
-            width: 80%; max-width: 600px; z-index: 10;
+            width: 90%; max-width: 500px; z-index: 10;
+            text-align: center;
+            transition: opacity 0.6s ease;
+        }
+
+        /* Forces "Scream into the void." into one single symmetrical line */
+        h1 { 
+            font-weight: 300; 
+            letter-spacing: 3px; 
+            margin-bottom: 50px; 
+            opacity: 0.8; 
+            white-space: nowrap; 
+            font-size: 1.8rem;
+        }
+
+        textarea {
+            width: 100%; height: 120px; background: transparent;
+            border: none; border-bottom: 1px solid #222; color: #fff;
+            font-family: inherit; font-size: 1.1rem; resize: none; outline: none;
+            padding: 15px; transition: border-color 0.4s ease;
             text-align: center;
         }
-        h1 { font-weight: 300; letter-spacing: 2px; margin-bottom: 40px; opacity: 0.7; }
-        textarea {
-            width: 100%; height: 150px; background: transparent;
-            border: none; border-bottom: 1px solid #333; color: #fff;
-            font-family: inherit; font-size: 1.2rem; resize: none; outline: none;
-            padding: 10px; transition: border-color 0.3s ease;
-        }
+
+        textarea:focus { border-bottom: 1px solid #555; }
+
         button {
-            margin-top: 40px; background: transparent; color: #fff;
-            border: 1px solid #fff; padding: 12px 40px; font-size: 1rem;
-            font-family: inherit; text-transform: uppercase; letter-spacing: 3px;
+            margin-top: 50px; background: transparent; color: #fff;
+            border: 1px solid #fff; padding: 14px 45px; font-size: 0.9rem;
+            font-family: inherit; text-transform: uppercase; letter-spacing: 4px;
             cursor: pointer; transition: all 0.4s ease;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
-        button:hover { background: #fff; color: #050505; }
 
-        /* RED COLOR TO TEST VISIBILITY */
+        button:hover { 
+            background: #fff; color: #050505; 
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.2); 
+        }
+
+        /* Aesthetic Counter - Ghostly Grey */
         .counter-container {
-            font-size: 1rem;
-            color: #ff4d4d; 
-            letter-spacing: 1px;
-            margin-top: 20px;
-            display: block !important;
-            opacity: 1 !important;
+            font-size: 0.8rem;
+            color: #444; 
+            letter-spacing: 2px;
+            text-transform: lowercase;
+            opacity: 0.6;
         }
-        #globalCount { font-weight: 600; color: #ff4d4d; }
 
-        .shard { position: absolute; color: #fff; pointer-events: none; }
+        #globalCount { color: #888; font-weight: 600; margin-right: 4px; }
+
+        .shard {
+            position: absolute; color: #fff; font-size: 1.2rem;
+            pointer-events: none; text-shadow: 0 0 10px rgba(255,255,255,0.5);
+            z-index: 5;
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 1.4rem; letter-spacing: 1px; }
+        }
     </style>
 </head>
 <body>
@@ -75,44 +109,57 @@
             appId: "1:391354334307:web:fdcd74425eb0e0ee954c56"
         };
 
+        // Init Firebase
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const database = firebase.database();
         const counterRef = database.ref('voidCounter');
 
+        // Real-time updates
         counterRef.on('value', (snapshot) => {
             const count = snapshot.val() || 0;
             document.getElementById('globalCount').innerText = count.toLocaleString();
         });
 
+        // Click Logic
         document.getElementById('shatterBtn').addEventListener('click', function() {
-            const textValue = document.getElementById('userInput').value;
-            if(textValue.trim() === "") return; 
-            counterRef.transaction((current) => (current || 0) + 1);
-            createShards(textValue);
+            const input = document.getElementById('userInput');
+            const val = input.value;
+            if(val.trim() === "") return; 
+
+            // Increment DB
+            counterRef.transaction((curr) => (curr || 0) + 1);
+
+            // Explode
+            createShards(val);
+            
+            // UI Reset
             document.getElementById('voidContainer').style.opacity = 0;
             setTimeout(() => {
-                document.getElementById('userInput').value = "";
+                input.value = "";
                 document.getElementById('voidContainer').style.opacity = 1;
-            }, 3000);
+            }, 3500);
         });
 
         function createShards(text) {
             const startX = window.innerWidth / 2;
             const startY = window.innerHeight / 2;
             text.split("").forEach((char) => {
+                 if(char === " ") return;
                  const span = document.createElement('span');
                  span.innerText = char;
-                 span.style.position = "absolute";
+                 span.classList.add('shard');
                  span.style.left = startX + "px";
                  span.style.top = startY + "px";
-                 span.style.color = "#fff";
                  document.body.appendChild(span);
+                 
                  anime({
                      targets: span,
-                     translateX: () => anime.random(-600, 600),
-                     translateY: () => anime.random(-600, 600),
+                     translateX: () => anime.random(-700, 700),
+                     translateY: () => anime.random(-700, 700),
+                     rotate: () => anime.random(-360, 360),
                      opacity: 0,
-                     duration: 2000,
+                     duration: anime.random(2000, 4000),
+                     easing: 'easeOutExpo',
                      complete: () => span.remove()
                  });
             });
