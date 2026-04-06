@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Aesthetic Void | Official Site | Scream into the Digital Void</title>
     
     <meta name="description" content="The #1 Aesthetic Void. A safe, anonymous place to release secrets and watch your words shatter into the abyss.">
@@ -23,14 +23,29 @@
             text-align: center;
             transition: opacity 0.6s ease;
         }
-        h1 { font-weight: 300; letter-spacing: 3px; margin-bottom: 50px; opacity: 0.8; white-space: nowrap; font-size: 1.8rem; }
+        h1 { 
+            font-weight: 300; 
+            letter-spacing: 3px; 
+            margin-bottom: 50px; 
+            opacity: 0.8; 
+            white-space: nowrap; 
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #ffffff 0%, #aaaaaa 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
         textarea {
             width: 100%; height: 120px; background: transparent;
             border: none; border-bottom: 1px solid #222; color: #fff;
             font-family: inherit; font-size: 1.1rem; resize: none; outline: none;
             padding: 15px; transition: border-color 0.4s ease; text-align: center;
         }
-        textarea:focus { border-bottom: 1px solid #555; }
+        textarea:focus { border-bottom: 1px solid #888; }
+        textarea::placeholder {
+            color: #3a3a3a;
+            font-weight: 300;
+        }
         button {
             margin-top: 50px; background: transparent; color: #fff;
             border: 1px solid #fff; padding: 14px 45px; font-size: 0.9rem;
@@ -38,9 +53,50 @@
             cursor: pointer; transition: all 0.4s ease; margin-bottom: 40px;
         }
         button:hover { background: #fff; color: #050505; box-shadow: 0 0 25px rgba(255, 255, 255, 0.2); }
+        button:active { transform: scale(0.97); }
         .counter-container { font-size: 1rem; color: #ff4d4d; letter-spacing: 1.5px; text-transform: lowercase; }
         #globalCount { font-weight: 600; color: #ff4d4d; margin-right: 5px; }
-        .shard { position: absolute; color: #fff; font-size: 1.2rem; pointer-events: none; z-index: 5; }
+        .shard { 
+            position: absolute; 
+            color: #fff; 
+            font-size: 1.2rem; 
+            pointer-events: none; 
+            z-index: 5;
+            text-shadow: 0 0 5px rgba(255,255,255,0.5);
+            will-change: transform;
+        }
+        
+        /* subtle screen flash */
+        .flash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0;
+        }
+        
+        /* vibration animation for container */
+        @keyframes voidShake {
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            10% { transform: translate(-4px, 2px) rotate(-0.5deg); }
+            20% { transform: translate(5px, -2px) rotate(0.5deg); }
+            30% { transform: translate(-3px, 3px) rotate(-0.3deg); }
+            40% { transform: translate(4px, -1px) rotate(0.3deg); }
+            50% { transform: translate(-2px, 2px) rotate(-0.2deg); }
+            60% { transform: translate(2px, -2px) rotate(0.2deg); }
+            70% { transform: translate(-1px, 1px) rotate(-0.1deg); }
+            80% { transform: translate(1px, -1px) rotate(0.1deg); }
+            90% { transform: translate(0px, 0px) rotate(0deg); }
+            100% { transform: translate(0px, 0px) rotate(0deg); }
+        }
+        
+        .shake-void {
+            animation: voidShake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+        }
     </style>
 </head>
 <body>
@@ -63,77 +119,112 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     
     <script>
-        // FIXED AUDIO - Using user interaction to unlock and play
+        // ============================================
+        // AESTHETIC VOID - WITH VIBRATION & HAPTIC FEEDBACK
+        // ============================================
+        
         const audio = document.getElementById('shatterAudio');
+        const voidContainer = document.getElementById('voidContainer');
+        const userInput = document.getElementById('userInput');
+        const shatterBtn = document.getElementById('shatterBtn');
+        
+        // ------------------------------
+        // HAPTIC / VIBRATION FUNCTION
+        // ------------------------------
+        function triggerVibration() {
+            // Check if vibration API is supported
+            if ('vibrate' in navigator) {
+                // Create a powerful glass-break like vibration pattern
+                // Pattern: short burst, pause, longer burst, final crackle
+                navigator.vibrate([
+                    50,   // vibrate 50ms
+                    30,   // pause 30ms
+                    80,   // vibrate 80ms
+                    20,   // pause 20ms
+                    100,  // vibrate 100ms
+                    40,   // pause 40ms
+                    60    // final vibrate 60ms
+                ]);
+                console.log("💥 Haptic feedback triggered");
+            } else {
+                console.log("Vibration API not supported on this device");
+                // Fallback: add a CSS shake effect for non-mobile devices
+                voidContainer.classList.add('shake-void');
+                setTimeout(() => {
+                    voidContainer.classList.remove('shake-void');
+                }, 400);
+            }
+        }
+        
+        // Add visual shake effect in addition to vibration for all devices
+        function addVisualShake() {
+            voidContainer.classList.add('shake-void');
+            setTimeout(() => {
+                voidContainer.classList.remove('shake-void');
+            }, 400);
+        }
+        
+        // Screen flash effect
+        function addScreenFlash() {
+            const flash = document.createElement('div');
+            flash.className = 'flash';
+            document.body.appendChild(flash);
+            anime({
+                targets: flash,
+                opacity: [0.35, 0],
+                duration: 250,
+                easing: 'easeOutQuad',
+                complete: () => flash.remove()
+            });
+        }
+        
+        // ------------------------------
+        // AUDIO WITH ROBUST UNLOCK
+        // ------------------------------
         let audioReady = false;
         
-        // Pre-load audio and prepare it
-        audio.load();
-        audio.volume = 0.8;
-        
-        // Function to unlock audio (called on any user interaction)
-        function unlockAudio() {
+        function unlockAudioOnInteraction() {
             if (audioReady) return;
-            
-            // Create a silent play attempt to unlock audio context
+            audio.load();
+            audio.volume = 0.7;
             audio.play().then(() => {
                 audio.pause();
                 audio.currentTime = 0;
                 audioReady = true;
-                console.log("Audio unlocked successfully");
+                console.log("🎧 Audio unlocked");
             }).catch(e => {
-                console.log("Audio unlock pending, will retry");
+                console.log("Audio unlock pending");
             });
         }
         
-        // Unlock audio on first user interaction (click or touch anywhere)
-        document.body.addEventListener('click', unlockAudio, { once: true });
-        document.body.addEventListener('touchstart', unlockAudio, { once: true });
+        // Unlock on any user interaction
+        document.body.addEventListener('click', unlockAudioOnInteraction, { once: true });
+        document.body.addEventListener('touchstart', unlockAudioOnInteraction, { once: true });
+        userInput.addEventListener('focus', unlockAudioOnInteraction);
+        userInput.addEventListener('click', unlockAudioOnInteraction);
+        shatterBtn.addEventListener('click', unlockAudioOnInteraction);
         
-        // Also unlock when user focuses on textarea or clicks button
-        const userInput = document.getElementById('userInput');
-        const shatterBtn = document.getElementById('shatterBtn');
-        
-        userInput.addEventListener('focus', unlockAudio);
-        userInput.addEventListener('click', unlockAudio);
-        shatterBtn.addEventListener('click', unlockAudio);
-        
-        // Function to play shatter sound reliably
         function playShatterSound() {
             if (!audioReady) {
-                // Try to unlock and play immediately
+                // Try to play anyway - might work after user interaction
+                audio.currentTime = 0;
                 audio.play().then(() => {
-                    audio.pause();
-                    audio.currentTime = 0;
                     audioReady = true;
-                    // Now play for real
-                    audio.currentTime = 0;
-                    audio.play().catch(e => console.log("Play failed:", e));
                 }).catch(e => {
-                    console.log("Still locked, attempting fallback");
-                    // Fallback: try anyway
-                    audio.currentTime = 0;
-                    audio.play().catch(e => console.log("Audio blocked"));
+                    console.log("Audio still locked, but haptics will work");
                 });
                 return;
             }
-            
-            // Audio is ready, play it
             audio.currentTime = 0;
             audio.play().catch(e => {
-                console.log("Play error, resetting:", e);
+                console.log("Audio play error:", e);
                 audioReady = false;
-                // Retry unlock
-                audio.play().then(() => {
-                    audio.pause();
-                    audio.currentTime = 0;
-                    audioReady = true;
-                    audio.play().catch(e => {});
-                }).catch(e => {});
             });
         }
         
-        // Firebase config
+        // ------------------------------
+        // FIREBASE SETUP
+        // ------------------------------
         const firebaseConfig = {
             apiKey: "AIzaSyAlaahdKtqEfpRo4dH5mNS3EztQmPG4uEU",
             authDomain: "aesthetic-void.firebaseapp.com",
@@ -154,49 +245,163 @@
             const count = snapshot.val() || 0;
             document.getElementById('globalCount').innerText = count.toLocaleString();
         });
-
-        // Release function
-        document.getElementById('shatterBtn').addEventListener('click', function() {
-            const input = document.getElementById('userInput');
-            const val = input.value;
-            if(val.trim() === "") return; 
-
-            // Play audio with our robust function
-            playShatterSound();
-
-            // Update Database & Animation
-            counterRef.transaction((curr) => (curr || 0) + 1);
-            createShards(val);
-            
-            document.getElementById('voidContainer').style.opacity = 0;
-            setTimeout(() => {
-                input.value = "";
-                document.getElementById('voidContainer').style.opacity = 1;
-            }, 3500);
-        });
-
+        
+        // ------------------------------
+        // SHATTER EFFECTS (letters flying)
+        // ------------------------------
         function createShards(text) {
             const startX = window.innerWidth / 2;
             const startY = window.innerHeight / 2;
-            text.split("").forEach((char) => {
-                 if(char === " ") return;
-                 const span = document.createElement('span');
-                 span.innerText = char;
-                 span.classList.add('shard');
-                 span.style.left = startX + "px";
-                 span.style.top = startY + "px";
-                 document.body.appendChild(span);
-                 anime({
-                     targets: span,
-                     translateX: () => anime.random(-700, 700),
-                     translateY: () => anime.random(-700, 700),
-                     rotate: () => anime.random(-360, 360),
-                     opacity: 0,
-                     duration: anime.random(2000, 4000),
-                     easing: 'easeOutExpo',
-                     complete: () => span.remove()
-                 });
+            
+            // Create flying letter shards
+            const chars = text.split('');
+            chars.forEach((char, index) => {
+                if(char === " " || char === "\n" || char === "\t") return;
+                const span = document.createElement('span');
+                span.innerText = char;
+                span.classList.add('shard');
+                // Slight initial random offset for organic feel
+                span.style.left = (startX + (Math.random() - 0.5) * 20) + "px";
+                span.style.top = (startY + (Math.random() - 0.5) * 20) + "px";
+                span.style.fontSize = (16 + Math.random() * 12) + "px";
+                span.style.fontWeight = Math.random() > 0.7 ? 'bold' : 'normal';
+                document.body.appendChild(span);
+                
+                anime({
+                    targets: span,
+                    translateX: () => anime.random(-750, 750),
+                    translateY: () => anime.random(-750, 750),
+                    rotate: () => anime.random(-400, 400),
+                    opacity: [1, 0],
+                    scale: [1, () => 0.3 + Math.random() * 0.5],
+                    duration: anime.random(1800, 4000),
+                    easing: 'easeOutExpo',
+                    complete: () => span.remove()
+                });
             });
+            
+            // Add extra glass particles (tiny fragments)
+            const particleCount = Math.min(35, Math.floor(text.length * 0.8));
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.width = Math.random() * 6 + 2 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.backgroundColor = `hsl(${Math.random() * 30 + 20}, 80%, 65%)`;
+                particle.style.borderRadius = '50%';
+                particle.style.pointerEvents = 'none';
+                particle.style.left = startX + (Math.random() - 0.5) * 30 + 'px';
+                particle.style.top = startY + (Math.random() - 0.5) * 30 + 'px';
+                document.body.appendChild(particle);
+                
+                anime({
+                    targets: particle,
+                    translateX: () => anime.random(-500, 500),
+                    translateY: () => anime.random(-500, 500),
+                    opacity: [0.8, 0],
+                    scale: [1, 0],
+                    duration: anime.random(1200, 2500),
+                    easing: 'easeOutQuad',
+                    complete: () => particle.remove()
+                });
+            }
+        }
+        
+        // ------------------------------
+        // MAIN RELEASE FUNCTION
+        // ------------------------------
+        let isReleasing = false;
+        
+        function releaseToVoid() {
+            if (isReleasing) return;
+            
+            const inputValue = userInput.value;
+            if (inputValue.trim() === "") {
+                // Gentle error feedback - small shake
+                userInput.style.borderBottomColor = "#ff4d4d";
+                setTimeout(() => {
+                    userInput.style.borderBottomColor = "#222";
+                }, 500);
+                
+                // Also give a tiny haptic feedback for empty attempt
+                if ('vibrate' in navigator) {
+                    navigator.vibrate(50);
+                }
+                return;
+            }
+            
+            isReleasing = true;
+            
+            // ========== VIBRATION & HAPTIC FEEDBACK ==========
+            triggerVibration();      // Physical vibration (mobile)
+            addVisualShake();        // Visual shake effect (all devices)
+            addScreenFlash();        // Subtle flash for impact
+            
+            // ========== AUDIO (if available) ==========
+            playShatterSound();
+            
+            // ========== UPDATE FIREBASE COUNTER ==========
+            counterRef.transaction((curr) => (curr || 0) + 1);
+            
+            // ========== CREATE SHATTER ANIMATION ==========
+            createShards(inputValue);
+            
+            // ========== FADE OUT CONTAINER ==========
+            voidContainer.style.opacity = "0";
+            voidContainer.style.transform = "scale(0.98)";
+            
+            // ========== RESET AFTER ANIMATION ==========
+            setTimeout(() => {
+                userInput.value = "";
+                voidContainer.style.opacity = "1";
+                voidContainer.style.transform = "scale(1)";
+                isReleasing = false;
+                // Refocus for next scream
+                setTimeout(() => {
+                    userInput.focus();
+                }, 100);
+            }, 3500);
+        }
+        
+        // Event listeners
+        shatterBtn.addEventListener('click', releaseToVoid);
+        
+        // Ctrl+Enter / Cmd+Enter shortcut
+        userInput.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                releaseToVoid();
+            }
+        });
+        
+        // Also trigger on Enter key with Shift? Not needed, but nice
+        userInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                releaseToVoid();
+            }
+        });
+        
+        // Initial counter sync
+        counterRef.once('value', (snap) => {
+            if (snap.val() === null) counterRef.set(0);
+        });
+        
+        // Aesthetic cursor effect - subtle
+        console.log("🌑 The void welcomes you. Vibration feedback enabled.");
+        
+        // Show a tiny hint for mobile users about vibration
+        if ('vibrate' in navigator) {
+            console.log("✅ Vibration API supported - haptic feedback ready");
+        } else {
+            // Add a small indicator in console but no big deal
+            const style = document.createElement('style');
+            style.textContent = `
+                .shake-void {
+                    animation: voidShake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+                }
+            `;
+            document.head.appendChild(style);
         }
     </script>
 </body>
