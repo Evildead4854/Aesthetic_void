@@ -38,16 +38,25 @@
             margin-top: 50px; background: transparent; color: #fff;
             border: 1px solid #fff; padding: 14px 45px; font-size: 0.9rem;
             font-family: inherit; text-transform: uppercase; letter-spacing: 4px;
-            cursor: pointer; transition: all 0.4s ease; margin-bottom: 40px;
+            cursor: pointer; transition: all 0.4s ease;
+            margin-bottom: 40px;
         }
-        button:hover { background: #fff; color: #050505; box-shadow: 0 0 25px rgba(255, 255, 255, 0.2); }
-        
+        button:hover { 
+            background: #fff; color: #050505; 
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.2); 
+        }
         .counter-container {
-            font-size: 1rem; color: #ff4d4d; 
-            letter-spacing: 1.5px; text-transform: lowercase;
+            font-size: 1rem;
+            color: #ff4d4d; 
+            letter-spacing: 1.5px;
+            text-transform: lowercase;
         }
         #globalCount { font-weight: 600; color: #ff4d4d; margin-right: 5px; }
-        .shard { position: absolute; color: #fff; font-size: 1.2rem; pointer-events: none; z-index: 5; }
+        .shard {
+            position: absolute; color: #fff; font-size: 1.2rem;
+            pointer-events: none; text-shadow: 0 0 10px rgba(255,255,255,0.5);
+            z-index: 5;
+        }
     </style>
 </head>
 <body>
@@ -60,15 +69,17 @@
             <span id="globalCount">0</span> secrets swallowed
         </div>
     </div>
+
+    <audio id="shatterAudio" preload="auto">
+        <source src="https://www.soundjay.com/misc/sounds/glass-shatter-1.mp3" type="audio/mpeg">
+    </audio>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     
     <script>
-        // Audio Setup (Hosted crisp shatter sound)
-        const shatterSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
-        shatterSound.volume = 0.5;
+        const audio = document.getElementById('shatterAudio');
 
         const firebaseConfig = {
             apiKey: "AIzaSyAlaahdKtqEfpRo4dH5mNS3EztQmPG4uEU",
@@ -94,15 +105,17 @@
             const val = input.value;
             if(val.trim() === "") return; 
 
-            // PLAY SOUND
-            shatterSound.currentTime = 0; // Reset to start if clicked rapidly
-            shatterSound.play().catch(e => console.log("Audio requires user interaction first"));
+            // Play sound immediately
+            audio.currentTime = 0;
+            audio.play().catch(e => console.log("Audio block: ", e));
 
-            // Update Database
+            // Sync with Firebase
             counterRef.transaction((curr) => (curr || 0) + 1);
 
+            // Explode text
             createShards(val);
             
+            // UI Transition
             document.getElementById('voidContainer').style.opacity = 0;
             setTimeout(() => {
                 input.value = "";
@@ -121,6 +134,7 @@
                  span.style.left = startX + "px";
                  span.style.top = startY + "px";
                  document.body.appendChild(span);
+                 
                  anime({
                      targets: span,
                      translateX: () => anime.random(-700, 700),
