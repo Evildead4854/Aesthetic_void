@@ -22,9 +22,10 @@
             color: #eaeaea;
             font-family: 'Space Grotesk', sans-serif;
             display: flex; 
+            flex-direction: column;
             justify-content: center; 
             align-items: center;
-            overflow: hidden; /* Stops scrolling when things shatter */
+            overflow: hidden;
         }
 
         .void-container {
@@ -88,6 +89,22 @@
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); 
         }
 
+        /* The Global Counter Styling */
+        .counter-container {
+            position: absolute;
+            bottom: 30px;
+            font-size: 0.9rem;
+            color: #444;
+            letter-spacing: 1px;
+            text-transform: lowercase;
+            transition: opacity 2s ease;
+        }
+
+        #globalCount {
+            color: #888;
+            font-weight: 600;
+        }
+
         .fade-in { 
             animation: fadeIn 2s ease-in forwards; 
             opacity: 0; 
@@ -113,22 +130,54 @@
         <textarea id="userInput" placeholder="Type your secret, your frustration, your unsent text..." class="fade-in"></textarea>
         <button id="shatterBtn" class="fade-in">Release</button>
     </div>
+
+    <div class="counter-container fade-in">
+        <span id="globalCount">...</span> secrets swallowed
+    </div>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
     <script>
+        // REPLACE THIS BLOCK WITH YOUR ACTUAL FIREBASE CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyAlaahdKtqEfpRo4dH5mNS3EztQmPG4uEU",
+            authDomain: "aesthetic-void.firebaseapp.com",
+            databaseURL: "https://aesthetic-void-default-rtdb.firebaseio.com",
+            projectId: "aesthetic-void",
+            storageBucket: "aesthetic-void.firebasestorage.app",
+            messagingSenderId: "391354334307",
+            appId: "1:391354334307:web:fdcd74425eb0e0ee954c56",
+            measurementId: "G-LNBT0LPE7T"
+        };
+
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const database = firebase.database();
+        const counterRef = database.ref('voidCounter');
+
+        // Listen for real-time updates to the counter
+        counterRef.on('value', (snapshot) => {
+            const count = snapshot.val() || 0;
+            document.getElementById('globalCount').innerText = count.toLocaleString();
+        });
+
         document.getElementById('shatterBtn').addEventListener('click', function() {
             const textInput = document.getElementById('userInput');
             const textValue = textInput.value;
             
-            // Don't do anything if they didn't type anything
             if(textValue.trim() === "") return; 
             
             const container = document.getElementById('voidContainer');
-            // Hide the original elements
             container.style.opacity = 0;
             
-            // Create the shards
+            // Increment the Firebase counter
+            counterRef.set(firebase.database.ServerValue.increment(1));
+
             createShards(textValue);
         });
 
@@ -144,7 +193,6 @@
                      span.innerText = char;
                      span.classList.add('shard');
                      
-                     // Randomize starting positions slightly
                      const offsetX = (Math.random() - 0.5) * 200;
                      const offsetY = (Math.random() - 0.5) * 100;
                      
@@ -153,7 +201,6 @@
                      
                      document.body.appendChild(span);
 
-                     // Animate the shards flying away
                      anime({
                          targets: span,
                          translateX: () => anime.random(-800, 800),
@@ -165,7 +212,6 @@
                          complete: function(anim) {
                              span.remove(); 
                              
-                             // Bring the UI back after animation
                              setTimeout(() => {
                                  document.getElementById('userInput').value = "";
                                  document.getElementById('voidContainer').style.opacity = 1;
