@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Aesthetic Void</title>
     
-    <meta name="description" content="Scream your secrets into the digital void. An anonymous, ephemeral experience.">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
@@ -13,18 +12,17 @@
             margin: 0; padding: 0; height: 100%;
             background-color: #050505; color: #eaeaea;
             font-family: 'Space Grotesk', sans-serif;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
+            display: flex; justify-content: center; align-items: center;
             overflow: hidden;
         }
 
         .void-container {
             display: flex; flex-direction: column; align-items: center;
             width: 80%; max-width: 600px; z-index: 10;
-            transition: opacity 0.5s ease;
+            text-align: center;
         }
 
-        h1 { font-weight: 300; letter-spacing: 2px; margin-bottom: 40px; opacity: 0.7; text-align: center; }
+        h1 { font-weight: 300; letter-spacing: 2px; margin-bottom: 40px; opacity: 0.7; }
 
         textarea {
             width: 100%; height: 150px; background: transparent;
@@ -40,24 +38,25 @@
             border: 1px solid #fff; padding: 12px 40px; font-size: 1rem;
             font-family: inherit; text-transform: uppercase; letter-spacing: 3px;
             cursor: pointer; transition: all 0.4s ease;
+            margin-bottom: 50px; /* Space for the counter */
         }
 
         button:hover { background: #fff; color: #050505; box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); }
 
+        /* Updated Counter Style - Now it's easy to see! */
         .counter-container {
-            position: absolute; bottom: 30px; font-size: 0.9rem;
-            color: #444; letter-spacing: 1px; text-transform: lowercase;
+            font-size: 0.9rem;
+            color: #666; 
+            letter-spacing: 1px;
+            text-transform: lowercase;
+            opacity: 0.8;
         }
 
-        #globalCount { color: #888; font-weight: 600; }
-
-        .fade-in { animation: fadeIn 2s ease-in forwards; opacity: 0; }
-        @keyframes fadeIn { to { opacity: 1; } }
+        #globalCount { color: #fff; font-weight: 600; margin-right: 5px; }
 
         .shard {
             position: absolute; color: #fff; font-size: 1.2rem;
             pointer-events: none; text-shadow: 0 0 8px rgba(255,255,255,0.8);
-            z-index: 5;
         }
     </style>
 </head>
@@ -67,10 +66,10 @@
         <h1 class="fade-in">Scream into the void.</h1>
         <textarea id="userInput" placeholder="Type your secret, your frustration, your unsent text..." class="fade-in"></textarea>
         <button id="shatterBtn" class="fade-in">Release</button>
-    </div>
-
-    <div class="counter-container fade-in">
-        <span id="globalCount">0</span> secrets swallowed
+        
+        <div class="counter-container fade-in">
+            <span id="globalCount">0</span> secrets swallowed
+        </div>
     </div>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
@@ -85,78 +84,61 @@
             projectId: "aesthetic-void",
             storageBucket: "aesthetic-void.firebasestorage.app",
             messagingSenderId: "391354334307",
-            appId: "1:391354334307:web:fdcd74425eb0e0ee954c56",
-            measurementId: "G-LNBT0LPE7T"
+            appId: "1:391354334307:web:fdcd74425eb0e0ee954c56"
         };
 
-        // Initialize Firebase
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const database = firebase.database();
         const counterRef = database.ref('voidCounter');
 
-        // Real-time listener
         counterRef.on('value', (snapshot) => {
-            const count = snapshot.val();
-            // If data exists, show it. Otherwise, show 0.
-            document.getElementById('globalCount').innerText = (count !== null) ? count.toLocaleString() : "0";
+            const count = snapshot.val() || 0;
+            document.getElementById('globalCount').innerText = count.toLocaleString();
         });
 
         document.getElementById('shatterBtn').addEventListener('click', function() {
             const textInput = document.getElementById('userInput');
             const textValue = textInput.value;
-            
             if(textValue.trim() === "") return; 
-            
-            document.getElementById('voidContainer').style.opacity = 0;
-            
-            // Increment logic
-            counterRef.transaction((currentCount) => {
-                return (currentCount || 0) + 1;
-            });
 
+            // Update Database
+            counterRef.transaction((current) => (current || 0) + 1);
+
+            // Trigger Animation
             createShards(textValue);
+            
+            // Hide UI temporarily
+            document.getElementById('voidContainer').style.opacity = 0;
+            setTimeout(() => {
+                textInput.value = "";
+                document.getElementById('voidContainer').style.opacity = 1;
+            }, 3000);
         });
 
         function createShards(text) {
             const words = text.split(" ");
             const startX = window.innerWidth / 2;
             const startY = window.innerHeight / 2;
-
             words.forEach((word) => {
-                const chars = word.split("");
-                chars.forEach((char) => {
+                word.split("").forEach((char) => {
                      const span = document.createElement('span');
                      span.innerText = char;
                      span.classList.add('shard');
-                     
-                     const offsetX = (Math.random() - 0.5) * 100;
-                     const offsetY = (Math.random() - 0.5) * 50;
-                     span.style.left = `${startX + offsetX}px`;
-                     span.style.top = `${startY + offsetY}px`;
-                     
+                     span.style.left = startX + "px";
+                     span.style.top = startY + "px";
                      document.body.appendChild(span);
-
                      anime({
                          targets: span,
-                         translateX: () => anime.random(-700, 700),
-                         translateY: () => anime.random(-700, 700),
+                         translateX: () => anime.random(-600, 600),
+                         translateY: () => anime.random(-600, 600),
                          rotate: () => anime.random(-360, 360),
                          opacity: 0,
-                         duration: anime.random(2000, 4000),
+                         duration: anime.random(1500, 3000),
                          easing: 'easeOutExpo',
-                         complete: function() {
-                             span.remove();
-                         }
+                         complete: () => span.remove()
                      });
                 });
             });
-
-            setTimeout(() => {
-                document.getElementById('userInput').value = "";
-                document.getElementById('voidContainer').style.opacity = 1;
-            }, 3500);
         }
     </script>
 </body>
